@@ -6,13 +6,15 @@ um contador que é acessado por múltiplas threads. O
 contador pode diminuir e aumentar.
 */
 public class Exercicio_1 {
-    private static int itr = 10;
 
+    private static int itr = 100;
 
     public static void main(String[] args) {
         Counter counter = new Counter();
 
         new Thread(() -> increase_counter_value(counter)).start();
+        new Thread(() -> increase_counter_value(counter)).start();
+        new Thread(() -> decrease_counter_value(counter)).start();
         new Thread(() -> decrease_counter_value(counter)).start();
 
     }

@@ -16,10 +16,14 @@ public class Lock {
         return(this.locker == Thread.currentThread());
     }
 
-    public synchronized void lock() throws InterruptedException {
+    public synchronized void lock() {
         //Executes in case of a second unlock without a prior unlock.
         while(isLocked && !isLockedByCurrentThread()){ // Second condition allows lock reentry
-            wait();
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         this.isLocked = true;
         this.count_locked+=1;
@@ -32,8 +36,8 @@ public class Lock {
             this.count_locked-=1;
             if(this.count_locked == 0){
                 isLocked = false;
-                notify();
                 this.locker = null;
+                notify();
             }
         }//else does nothing -> allows reentry operation
 

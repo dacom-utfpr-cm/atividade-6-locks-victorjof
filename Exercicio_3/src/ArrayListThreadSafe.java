@@ -19,8 +19,9 @@ public class ArrayListThreadSafe{
     }
 
     public void add(int value){
+        write_lock.lock();
+
         try{
-            write_lock.lock();
             array_list.add(value);
         } finally {
             write_lock.unlock();
@@ -28,13 +29,27 @@ public class ArrayListThreadSafe{
     }
 
 
-    public int remove_head(){
+    public boolean isEmpty(){
+        Boolean aux = true;
+
+        read_lock.lock();
         try {
-            write_lock.lock();
-            if (array_list.size() > 0) {
+            aux = array_list.size() == 0;
+        }finally {
+            read_lock.unlock();
+        }
+        return aux;
+    }
+
+
+    public int remove_head(){
+        write_lock.lock();
+
+        try {
+            if (!isEmpty()) {
                 return array_list.remove(0);
             } else {
-                return -1;
+                return -1;//null
             }
         }finally {
             write_lock.unlock();
@@ -43,9 +58,10 @@ public class ArrayListThreadSafe{
 
 
     public int get_head(){
+        read_lock.lock();
+
         try{
-            read_lock.lock();
-            if (array_list.size() > 0) {
+            if (array_list.size() > 0) {//although its reentrant there's no need to acquire another read lock(i,e. by using isEmpty())
                 return array_list.get(0);
             }
             else{
@@ -57,8 +73,9 @@ public class ArrayListThreadSafe{
     }
 
     public String toString() {
+        read_lock.lock();
+
         try {
-            read_lock.lock();
             String aux = "";
             aux += "[";
 

@@ -11,6 +11,7 @@ public class Exercicio_2 {
     private static int itr = 5;
 
     public static void main(String[] args) throws InterruptedException {
+
         SharedFifoQueue queue = new SharedFifoQueue(5);
         new Thread(() -> producer(queue)).start();
         new Thread(() -> consumer(queue)).start();
