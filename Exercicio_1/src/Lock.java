@@ -17,7 +17,7 @@ public class Lock {
     }
 
     public synchronized void lock() {
-        //Executes in case of a second unlock without a prior unlock.
+        //Executes in case of a second lock without a prior unlock.
         while(isLocked && !isLockedByCurrentThread()){ // Second condition allows lock reentry
             try {
                 wait();

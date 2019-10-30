@@ -27,7 +27,6 @@ public class Counter {
             past_value = count;
             this.count -= 1;
             System.out.printf("Decremented value %d to %d%n", past_value, this.count);
-            lock.unlock();
         } finally {
             lock.unlock();//Prevents starvation of other threads in case something goes wrong inside the try block
         }
